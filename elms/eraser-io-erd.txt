@@ -2,7 +2,6 @@
 title E-Learning Management System Data Model
 
 // tables
-
 users [icon: user, color: yellow]{
   user_id string pk
   name string
@@ -14,6 +13,7 @@ users [icon: user, color: yellow]{
   status string
   created_at timestamp
   updated_at timestamp
+  default_language_id string
 }
 
 roles [icon: shield, color: blue]{
@@ -58,13 +58,17 @@ user_security [icon: shield-off, color: red]{
 
 courses [icon: book-open, color: green]{
   course_id string pk
-  title string
-  description string
   category_id string
   price float
   is_free boolean
   level string
   status string
+  tags string
+  is_published string
+  publish_at datetime
+  amount int // default 0
+  currency string //default HKD
+  is_featured string // default 0
   created_by string
   created_at timestamp
 }
@@ -169,7 +173,7 @@ badges [icon: star, color: yellow]{
   icon string
 }
 
-userbadges [icon: smile, color: lightyellow]{
+user_badges [icon: smile, color: lightyellow]{
   user_id string pk
   badge_id string pk
   awarded_at timestamp
@@ -323,6 +327,33 @@ payouts [icon: send, color: blue]{
   paid_at timestamp
 }
 
+languages [icon: globe, color: purple] {
+  
+  language_id string pk
+  code string
+  name string
+  is_system_default boolean
+}
+
+course_localizations [icon: file-text, color: lightpurple] {
+  course_localization_id string pk
+  course_id string
+  language_id string
+  title string
+  short_description string
+  description string
+}
+
+post_localizations [icon: file-text, color: lightpurple] {
+  post_localization_id string pk
+  post_id string
+  language_id string
+  content string
+}
+
+
+
+
 // relationships
 
 // Users ↔ Roles (many-to-many via user_roles)
@@ -366,9 +397,9 @@ submissions.quiz_id > quizzes.quiz_id
 assignment_submissions.assignment_id > assignments.assignment_id
 assignment_submissions.user_id > users.user_id
 
-// Users ↔ Badges (many-to-many via UserBadges)
-userbadges.user_id > users.user_id
-userbadges.badge_id > badges.badge_id
+// Users ↔ Badges (many-to-many via user_badges)
+user_badges.user_id > users.user_id
+user_badges.badge_id > badges.badge_id
 
 // Orders ↔ Courses (many-to-many via order_items)
 order_items.order_id > orders.order_id
@@ -483,4 +514,8 @@ revenue_sharing.instructor_id > instructors.instructor_id
 
 // Payouts ↔ Instructors
 payouts.instructor_id > instructors.instructor_id
-
+users.default_language_id > languages.language_id
+course_localizations.course_id > courses.course_id
+course_localizations.language_id > languages.language_id
+post_localizations.post_id > posts.post_id
+post_localizations.language_id > languages.language_id
