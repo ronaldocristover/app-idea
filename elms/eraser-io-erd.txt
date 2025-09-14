@@ -1,0 +1,486 @@
+// title
+title E-Learning Management System Data Model
+
+// tables
+
+users [icon: user, color: yellow]{
+  user_id string pk
+  name string
+  email string
+  password_hash string
+  phone string
+  photo string
+  bio string
+  status string
+  created_at timestamp
+  updated_at timestamp
+}
+
+roles [icon: shield, color: blue]{
+  role_id string pk
+  name string
+  description string
+}
+
+permissions [icon: lock, color: orange]{
+  permission_id string pk
+  name string
+  description string
+}
+
+user_roles [icon: users, color: lightblue]{
+  user_id string pk
+  role_id string pk
+}
+
+role_permissions [icon: key, color: lightgreen]{
+  role_id string pk
+  permission_id string pk
+}
+
+auth_providers [icon: log-in, color: purple]{
+  auth_id string pk
+  user_id string
+  provider_type string
+  provider_uid string
+  token string
+  expires_at timestamp
+}
+
+user_security [icon: shield-off, color: red]{
+  user_id string pk
+  two_fa_enabled boolean
+  backup_codes string
+  last_login timestamp
+  reset_token string
+  reset_expiry timestamp
+}
+
+courses [icon: book-open, color: green]{
+  course_id string pk
+  title string
+  description string
+  category_id string
+  price float
+  is_free boolean
+  level string
+  status string
+  created_by string
+  created_at timestamp
+}
+
+course_categories [icon: folder, color: teal]{
+  category_id string pk
+  name string
+  parent_id string
+}
+
+modules [icon: layers, color: lightpurple]{
+  module_id string pk
+  course_id string
+  title string
+  order_index int
+}
+
+lessons [icon: file-text, color: lightyellow]{
+  lesson_id string pk
+  module_id string
+  title string
+  content_type string
+  url string
+  order_index int
+  duration int
+  is_drip boolean
+  release_date date
+}
+
+enrollments [icon: user-check, color: lightgreen]{
+  enrollment_id string pk
+  course_id string
+  user_id string
+  status string
+  enrolled_at timestamp
+  completed_at timestamp
+}
+
+quizzes [icon: help-circle, color: pink]{
+  quiz_id string pk
+  lesson_id string
+  title string
+  type string
+  time_limit int
+  attempt_limit int
+}
+
+questions [icon: help-circle, color: lightpink]{
+  question_id string pk
+  quiz_id string
+  text string
+  type string
+  points int
+}
+
+answers [icon: check-circle, color: lightgreen]{
+  answer_id string pk
+  question_id string
+  text string
+  is_correct boolean
+}
+
+submissions [icon: edit-3, color: lightblue]{
+  submission_id string pk
+  quiz_id string
+  user_id string
+  attempt_no int
+  score float
+  submitted_at timestamp
+}
+
+assignments [icon: file-plus, color: orange]{
+  assignment_id string pk
+  lesson_id string
+  title string
+  instructions string
+  due_date date
+}
+
+assignment_submissions [icon: upload, color: lightorange]{
+  submission_id string pk
+  assignment_id string
+  user_id string
+  file_url string
+  grade string
+  feedback string
+  submitted_at timestamp
+}
+
+certificates [icon: award, color: gold]{
+  certificate_id string pk
+  user_id string
+  course_id string
+  issue_date date
+  url string
+}
+
+badges [icon: star, color: yellow]{
+  badge_id string pk
+  name string
+  description string
+  icon string
+}
+
+userbadges [icon: smile, color: lightyellow]{
+  user_id string pk
+  badge_id string pk
+  awarded_at timestamp
+}
+
+points [icon: trending-up, color: green]{
+  point_id string pk
+  user_id string
+  activity_type string
+  points int
+  awarded_at timestamp
+}
+
+messages [icon: message-circle, color: lightblue]{
+  message_id string pk
+  sender_id string
+  receiver_id string
+  content string
+  created_at timestamp
+  is_read boolean
+}
+
+announcements [icon: megaphone, color: orange]{
+  announcement_id string pk
+  course_id string
+  title string
+  content string
+  created_by string
+  created_at timestamp
+}
+
+forums [icon: message-square, color: purple]{
+  forum_id string pk
+  course_id string
+  title string
+  created_by string
+  created_at timestamp
+}
+
+posts [icon: file, color: lightpurple]{
+  post_id string pk
+  forum_id string
+  user_id string
+  content string
+  created_at timestamp
+}
+
+comments [icon: message-square, color: lightgray]{
+  comment_id string pk
+  post_id string
+  user_id string
+  content string
+  created_at timestamp
+}
+
+orders [icon: shopping-cart, color: blue]{
+  order_id string pk
+  user_id string
+  total_amount float
+  status string
+  created_at timestamp
+  paid_at timestamp
+}
+
+order_items [icon: package, color: lightblue]{
+  order_item_id string pk
+  order_id string
+  course_id string
+  price float
+  discount float
+}
+
+payments [icon: credit-card, color: green]{
+  payment_id string pk
+  order_id string
+  gateway string
+  amount float
+  status string
+  transaction_id string
+  paid_at timestamp
+}
+
+coupons [icon: tag, color: pink]{
+  coupon_id string pk
+  code string
+  discount_type string
+  value float
+  expiry_date date
+  usage_limit int
+}
+
+subscriptions [icon: repeat, color: purple]{
+  sub_id string pk
+  user_id string
+  plan_id string
+  status string
+  start_date date
+  end_date date
+}
+
+plans [icon: calendar, color: teal]{
+  plan_id string pk
+  name string
+  price float
+  duration int
+  features string
+}
+
+user_activity_logs [icon: activity, color: orange]{
+  log_id string pk
+  user_id string
+  action_type string
+  target_id string
+  target_type string
+  created_at timestamp
+  ip_address string
+}
+
+gradebook [icon: book, color: lightgreen]{
+  grade_id string pk
+  user_id string
+  course_id string
+  score float
+  grade string
+  updated_at timestamp
+}
+
+instructors [icon: user-check, color: purple]{
+  instructor_id string pk
+  user_id string
+  bio string
+  verified boolean
+  rating float
+}
+
+revenue_sharing [icon: dollar-sign, color: green]{
+  revenue_id string pk
+  course_id string
+  instructor_id string
+  percentage float
+  earned_amount float
+  payout_status string
+}
+
+payouts [icon: send, color: blue]{
+  payout_id string pk
+  instructor_id string
+  amount float
+  status string
+  scheduled_at timestamp
+  paid_at timestamp
+}
+
+// relationships
+
+// Users ↔ Roles (many-to-many via user_roles)
+user_roles.user_id > users.user_id
+user_roles.role_id > roles.role_id
+
+// Roles ↔ Permissions (many-to-many via role_permissions)
+role_permissions.role_id > roles.role_id
+role_permissions.permission_id > permissions.permission_id
+
+// Users ↔ Courses (many-to-many via Enrollments)
+enrollments.user_id > users.user_id
+enrollments.course_id > courses.course_id
+
+// Courses ↔ Modules (one-to-many)
+modules.course_id > courses.course_id
+
+// Courses ↔ Course Categories (one-to-many)
+courses.category_id > course_categories.category_id
+
+// Modules ↔ Lessons (one-to-many)
+lessons.module_id > modules.module_id
+
+// Lessons ↔ Quizzes (one-to-many)
+quizzes.lesson_id > lessons.lesson_id
+
+// Lessons ↔ Assignments (one-to-many)
+assignments.lesson_id > lessons.lesson_id
+
+// Quizzes ↔ Questions (one-to-many)
+questions.quiz_id > quizzes.quiz_id
+
+// Questions ↔ Answers (one-to-many)
+answers.question_id > questions.question_id
+
+// Users ↔ Submissions (many-to-many)
+submissions.user_id > users.user_id
+submissions.quiz_id > quizzes.quiz_id
+
+// Assignments ↔ assignment_submissions (one-to-many)
+assignment_submissions.assignment_id > assignments.assignment_id
+assignment_submissions.user_id > users.user_id
+
+// Users ↔ Badges (many-to-many via UserBadges)
+userbadges.user_id > users.user_id
+userbadges.badge_id > badges.badge_id
+
+// Orders ↔ Courses (many-to-many via order_items)
+order_items.order_id > orders.order_id
+order_items.course_id > courses.course_id
+
+// Orders ↔ Payments (one-to-many)
+payments.order_id > orders.order_id
+
+// Users ↔ Subscriptions ↔ Plans (one-to-many)
+subscriptions.user_id > users.user_id
+subscriptions.plan_id > plans.plan_id
+
+// Courses ↔ Instructors (many-to-many)
+revenue_sharing.course_id > courses.course_id
+revenue_sharing.instructor_id > instructors.instructor_id
+instructors.user_id > users.user_id
+
+// Instructors ↔ revenue_sharing (one-to-many)
+revenue_sharing.instructor_id > instructors.instructor_id
+
+// Instructors ↔ Payouts (one-to-many)
+payouts.instructor_id > instructors.instructor_id
+
+// Users ↔ Certificates (one-to-many)
+certificates.user_id > users.user_id
+certificates.course_id > courses.course_id
+
+// course_categories (self-referencing)
+course_categories.parent_id > course_categories.category_id
+
+// Announcements ↔ Courses
+announcements.course_id > courses.course_id
+
+// Announcements ↔ Users (created_by)
+announcements.created_by > users.user_id
+
+// Forums ↔ Courses
+forums.course_id > courses.course_id
+
+// Forums ↔ Users (created_by)
+forums.created_by > users.user_id
+
+// Posts ↔ Forums
+posts.forum_id > forums.forum_id
+
+// Posts ↔ Users
+posts.user_id > users.user_id
+
+// Comments ↔ Posts
+comments.post_id > posts.post_id
+
+// Comments ↔ Users
+comments.user_id > users.user_id
+
+// Gradebook ↔ Users & Courses
+gradebook.user_id > users.user_id
+gradebook.course_id > courses.course_id
+
+// auth_providers ↔ Users
+auth_providers.user_id > users.user_id
+
+// user_security ↔ Users
+user_security.user_id > users.user_id
+
+// assignment_submissions ↔ Assignments
+assignment_submissions.assignment_id > assignments.assignment_id
+
+// assignment_submissions ↔ Users
+assignment_submissions.user_id > users.user_id
+
+// Points ↔ Users
+points.user_id > users.user_id
+
+// Messages ↔ Users (sender/receiver)
+messages.sender_id > users.user_id
+messages.receiver_id > users.user_id
+
+// user_activity_logs ↔ Users
+user_activity_logs.user_id > users.user_id
+
+// Orders ↔ Users
+orders.user_id > users.user_id
+
+// order_items ↔ Orders
+order_items.order_id > orders.order_id
+
+// order_items ↔ Courses
+order_items.course_id > courses.course_id
+
+// Payments ↔ Orders
+payments.order_id > orders.order_id
+
+// Submissions ↔ Quizzes
+submissions.quiz_id > quizzes.quiz_id
+
+// Submissions ↔ Users
+submissions.user_id > users.user_id
+
+// assignment_submissions ↔ Assignments
+assignment_submissions.assignment_id > assignments.assignment_id
+
+// assignment_submissions ↔ Users
+assignment_submissions.user_id > users.user_id
+
+// Certificates ↔ Users & Courses
+certificates.user_id > users.user_id
+certificates.course_id > courses.course_id
+
+// revenue_sharing ↔ Courses & Instructors
+revenue_sharing.course_id > courses.course_id
+revenue_sharing.instructor_id > instructors.instructor_id
+
+// Payouts ↔ Instructors
+payouts.instructor_id > instructors.instructor_id
+
