@@ -1,0 +1,209 @@
+title Church Membership Management System
+
+District [icon: map] {
+id int pk
+name string
+created_at timestamp
+updated_at timestamp
+created_by string
+updated_by string
+}
+
+Resort [icon: building] {
+id int pk
+district_id int fk
+name string
+created_at timestamp
+updated_at timestamp
+created_by string
+updated_by string
+}
+
+Parish [icon: home] {
+id int pk
+resort_id int fk
+name string
+created_at timestamp
+updated_at timestamp
+created_by string
+updated_by string
+}
+
+Church [icon: home] {
+id int
+district_id int
+resort_id int
+parish_id int
+created_at timestamp
+updated_at timestamp
+created_by string
+updated_by string
+}
+
+Ward [icon: map-pin, color: green] {
+id int pk
+parish_id
+code string
+name string
+created_at timestamp
+updated_at timestamp
+created_by string
+updated_by string
+}
+
+Member [icon: user, color: blue] {
+id int pk
+church_id int
+member_number string
+nik string
+name string
+gender string
+birth_date date
+birth_place string
+address string
+phone string
+email string
+marital_status string
+origin_church string
+membership_status string
+baptism_date date
+confirmation_date date
+last_education string
+status string [aktif, tidak aktif]
+profession string
+registration_date string
+father_name string
+father_id string
+mother_name string
+mother_id string
+created_at timestamp
+updated_at timestamp
+created_by string
+updated_by string
+}
+
+Family [icon: users, color: yellow] {
+id int pk
+member_id int fk
+ward_id int fk
+family_order int
+relationship string
+created_at timestamp
+updated_at timestamp
+created_by string
+updated_by string
+}
+
+Document [icon: file, color: gray] {
+id int pk
+member_id int fk
+document_type string
+file_path string
+upload_date date
+created_at timestamp
+updated_at timestamp
+created_by string
+updated_by string
+}
+
+Registration [icon: clipboard, color: orange] {
+id int pk
+member_id int fk
+ward_id int fk
+registration_date date
+status string
+notes text
+created_at timestamp
+updated_at timestamp
+created_by string
+updated_by string
+}
+
+Baptism [icon: droplet, color: purple] {
+id int pk
+member_id int fk
+baptism_date date
+baptism_type string
+baptism_place string
+baptized_by string
+notes text
+created_at timestamp
+updated_at timestamp
+created_by string
+updated_by string
+}
+
+BaptismDocument [icon: file-text, color: purple] {
+id int pk
+baptism_id int fk
+document_type string
+file_path string
+upload_date date
+created_at timestamp
+updated_at timestamp
+created_by string
+updated_by string
+}
+
+Marriage [icon: heart, color: red] {
+id int pk
+groom_id int fk
+bride_id int fk
+agreement_date date
+blessing_date date
+location string
+officiant string
+status string
+notes text
+created_at timestamp
+updated_at timestamp
+created_by string
+updated_by string
+}
+
+MarriageDocument [icon: file-text, color: red] {
+id int pk
+marriage_id int fk
+document_type string
+file_path string
+upload_date date
+created_at timestamp
+updated_at timestamp
+created_by string
+updated_by string
+}
+
+Parish.resort_id > Resort.id
+Resort.district_id >District.id
+Ward.parish_id > Parish.id
+
+Church.district_id > District.id
+Church.parish_id > Parish.id
+Church.resort_id > Resort.id
+
+Member.id < Family.member_id
+Ward.id < Family.ward_id
+Member.id < Document.member_id
+Member.id < Registration.member_id
+Ward.id < Registration.ward_id
+Member.id < Baptism.member_id
+Baptism.id < BaptismDocument.baptism_id
+Member.id < Marriage.groom_id
+Member.id < Marriage.bride_id
+Marriage.id < MarriageDocument.marriage_id
+Parish.resort_id > Resort.id
+Resort.district_id > District.id
+Ward.parish_id > Parish.id
+Church.district_id > District.id
+Church.parish_id > Parish.id
+Church.resort_id > Resort.id
+Member.id < Family.member_id
+Ward.id < Family.ward_id
+Member.id < Document.member_id
+Member.id < Registration.member_id
+Ward.id < Registration.ward_id
+Member.id < Baptism.member_id
+Baptism.id < BaptismDocument.baptism_id
+Member.id < Marriage.groom_id
+Member.id < Marriage.bride_id
+Marriage.id < MarriageDocument.marriage_id

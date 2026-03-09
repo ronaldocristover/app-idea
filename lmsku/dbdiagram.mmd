@@ -1,0 +1,277 @@
+erDiagram
+    users ||--o{ user_roles : "has"
+    users ||--o{ organization_members : "belongs to"
+    users ||--o{ enrollments : "enrolls in"
+    users ||--o{ session_progress : "tracks"
+    users ||--o{ assessment_submissions : "submits"
+    users ||--o{ assessments : "creates"
+    users ||--o{ tutor_groups : "leads"
+    users ||--o{ tutor_group_members : "joins"
+    users ||--o{ group_threads : "creates"
+    users ||--o{ thread_posts : "posts"
+    users ||--o{ orders : "places"
+    users ||--o{ promocode_usages : "uses"
+
+    roles ||--o{ role_permissions : "has"
+    roles ||--o{ user_roles : "assigned to"
+
+    permissions ||--o{ role_permissions : "granted to"
+
+    organizations ||--o{ organization_members : "has members"
+    organizations ||--o{ organization_assessments : "has"
+
+    categories ||--o{ series : "contains"
+
+    series ||--o{ sessions : "contains"
+    series ||--o{ enrollments : "has"
+    series ||--o{ tutor_groups : "has"
+    series ||--o{ order_items : "purchased in"
+
+    sessions ||--o{ session_contents : "contains"
+    sessions ||--o{ session_progress : "tracked in"
+
+    languages ||--o{ media_files : "used in"
+
+    media_files ||--o{ session_contents : "linked to"
+
+    assessments ||--o{ questions : "contains"
+    assessments ||--o{ assessment_submissions : "submitted for"
+    assessments ||--o{ organization_assessments : "assigned to"
+    assessments ||--o{ student_assessments : "assigned to"
+
+    questions ||--o{ question_options : "has"
+    questions ||--o{ submission_answers : "answered in"
+
+    question_options ||--o{ submission_answers : "selected in"
+
+    assessment_submissions ||--o{ submission_answers : "contains"
+
+    tutor_groups ||--o{ tutor_group_members : "has"
+    tutor_groups ||--o{ group_threads : "contains"
+
+    group_threads ||--o{ thread_posts : "contains"
+
+    orders ||--o{ order_items : "contains"
+    orders ||--o{ payments : "paid for"
+
+    promocodes ||--o{ promocode_usages : "used by"
+
+    users {
+        uuid id PK
+        varchar email
+        varchar password_hash
+        varchar name
+        varchar status
+        timestamp created_at
+    }
+
+    roles {
+        uuid id PK
+        varchar name
+    }
+
+    permissions {
+        uuid id PK
+        varchar name
+    }
+
+    role_permissions {
+        uuid role_id FK
+        uuid permission_id FK
+    }
+
+    user_roles {
+        uuid user_id FK
+        uuid role_id FK
+    }
+
+    organizations {
+        uuid id PK
+        varchar name
+        timestamp created_at
+    }
+
+    organization_members {
+        uuid id PK
+        uuid organization_id FK
+        uuid user_id FK
+        varchar role
+    }
+
+    categories {
+        uuid id PK
+        varchar name
+    }
+
+    series {
+        uuid id PK
+        uuid category_id FK
+        varchar title
+        text description
+        decimal price
+        boolean is_free
+    }
+
+    sessions {
+        uuid id PK
+        uuid series_id FK
+        varchar title
+        text description
+        int order_no
+    }
+
+    languages {
+        uuid id PK
+        varchar code
+        varchar name
+    }
+
+    media_files {
+        uuid id PK
+        varchar type
+        text url
+        uuid language_id FK
+        timestamp created_at
+    }
+
+    session_contents {
+        uuid id PK
+        uuid session_id FK
+        uuid media_id FK
+        varchar content_type
+        text text_content
+    }
+
+    enrollments {
+        uuid id PK
+        uuid user_id FK
+        uuid series_id FK
+        varchar status
+        timestamp enrolled_at
+    }
+
+    session_progress {
+        uuid id PK
+        uuid user_id FK
+        uuid session_id FK
+        int progress
+        boolean completed
+    }
+
+    assessments {
+        uuid id PK
+        varchar title
+        varchar type
+        uuid created_by FK
+    }
+
+    questions {
+        uuid id PK
+        uuid assessment_id FK
+        text question_text
+    }
+
+    question_options {
+        uuid id PK
+        uuid question_id FK
+        text option_text
+        boolean is_correct
+    }
+
+    assessment_submissions {
+        uuid id PK
+        uuid assessment_id FK
+        uuid user_id FK
+        decimal score
+        timestamp submitted_at
+    }
+
+    submission_answers {
+        uuid id PK
+        uuid submission_id FK
+        uuid question_id FK
+        uuid selected_option_id FK
+    }
+
+    organization_assessments {
+        uuid id PK
+        uuid organization_id FK
+        uuid assessment_id FK
+    }
+
+    student_assessments {
+        uuid id PK
+        uuid user_id FK
+        uuid assessment_id FK
+    }
+
+    tutor_groups {
+        uuid id PK
+        uuid series_id FK
+        uuid leader_id FK
+        varchar referral_code
+    }
+
+    tutor_group_members {
+        uuid id PK
+        uuid group_id FK
+        uuid user_id FK
+    }
+
+    group_threads {
+        uuid id PK
+        uuid group_id FK
+        varchar title
+        uuid created_by FK
+    }
+
+    thread_posts {
+        uuid id PK
+        uuid thread_id FK
+        uuid user_id FK
+        text content
+    }
+
+    orders {
+        uuid id PK
+        uuid user_id FK
+        decimal total_amount
+        varchar status
+        timestamp created_at
+    }
+
+    order_items {
+        uuid id PK
+        uuid order_id FK
+        uuid series_id FK
+        decimal price
+    }
+
+    payments {
+        uuid id PK
+        uuid order_id FK
+        varchar gateway
+        varchar transaction_id
+        varchar status
+    }
+
+    promocodes {
+        uuid id PK
+        varchar code
+        varchar type
+        int discount_percent
+        timestamp expires_at
+    }
+
+    promocode_usages {
+        uuid id PK
+        uuid promocode_id FK
+        uuid user_id FK
+    }
+
+    reports {
+        uuid id PK
+        varchar type
+        text file_url
+        timestamp generated_at
+    }
